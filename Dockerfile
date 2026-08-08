@@ -32,5 +32,4 @@ RUN sudo apk update \
 WORKDIR $HOME
 EXPOSE $VNC_PORT $NOVNC_PORT
 COPY supervisord.conf /etc/supervisord.conf
-COPY index.html /opt/noVNC/index.html
 CMD ["sudo","/usr/bin/supervisord","-c","/etc/supervisord.conf"]
