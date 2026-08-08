@@ -23,13 +23,13 @@ ENV USER=alpine \
     VNC_PORT=5900 \
     VNC_RESOLUTION=1024x768 \
     VNC_COL_DEPTH=24  \
-    NOVNC_PORT=6080 \
+    NOVNC_PORT=8080 \
     NOVNC_HOME=/opt/noVNC
 RUN sudo apk update \
   && sudo apk add git \
   && sudo git clone https://github.com/novnc/noVNC /opt/noVNC \
   && sudo apk add bash
 WORKDIR $HOME
-EXPOSE $VNC_PORT $NOVNC_PORT
+EXPOSE $NOVNC_PORT
 COPY supervisord.conf /etc/supervisord.conf
 CMD ["sudo","/usr/bin/supervisord","-c","/etc/supervisord.conf"]
