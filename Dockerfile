@@ -1,0 +1,36 @@
+# from https://ddweb.in/forum/viewtopic.php?t=2942
+FROM alpine:latest
+RUN apk update
+RUN apk upgrade
+RUN apk --no-cache --update add x11vnc dbus-x11 py-pip\
+&& echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+&& echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+RUN apk add winetricks && apk --no-cache add xvfb xfce4 xfce4-terminal supervisor sudo \
+&& addgroup alpine \
+&& adduser  -G alpine -s /bin/sh -D alpine \
+&& echo "alpine:alpine" | /usr/sbin/chpasswd \
+&& echo "alpine ALL=NOPASSWD: ALL" >> /etc/sudoers \
+&& rm -rf /apk /tmp/* /var/cache/apk/*
+USER alpine
+ENV USER=alpine \
+    DISPLAY=:1 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    HOME=/home/alpine \
+    TERM=xterm \
+    SHELL=/bin/bash \
+    VNC_PASSWD=alpinelinux \
+    VNC_PORT=5900 \
+    VNC_RESOLUTION=1024x768 \
+    VNC_COL_DEPTH=24  \
+    NOVNC_PORT=6080 \
+    NOVNC_HOME=/opt/noVNC
+RUN sudo apk update \
+  && sudo apk add git \
+  && sudo git clone https://github.com/novnc/noVNC /opt/noVNC \
+  && sudo apk add bash
+WORKDIR $HOME
+EXPOSE $VNC_PORT $NOVNC_PORT
+COPY supervisord.conf /etc/supervisord.conf
+COPY index.html /opt/noVNC/index.html
+CMD ["sudo","/usr/bin/supervisord","-c","/etc/supervisord.conf"]
