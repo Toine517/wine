@@ -11,6 +11,8 @@ RUN apk add winetricks && apk --no-cache add xvfb xfce4 xfce4-terminal superviso
 && echo "alpine:alpine" | /usr/sbin/chpasswd \
 && echo "alpine ALL=NOPASSWD: ALL" >> /etc/sudoers \
 && rm -rf /apk /tmp/* /var/cache/apk/*
+RUN x11vnc -storepasswd toine57! /etc/vncpasswd
+RUN chown alpine:alpine /etc/vncpasswd
 USER alpine
 ENV USER=alpine \
     DISPLAY=:1 \
@@ -32,6 +34,4 @@ RUN sudo apk update \
 WORKDIR $HOME
 EXPOSE $NOVNC_PORT
 COPY supervisord.conf /etc/supervisord.conf
-RUN x11vnc -storepasswd toine57! /etc/vncpasswd
-#RUN chown alpine:alpine /etc/vncpasswd
 CMD ["sudo","/usr/bin/supervisord","-c","/etc/supervisord.conf"]
