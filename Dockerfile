@@ -2,7 +2,7 @@
 FROM alpine:latest
 RUN apk update
 RUN apk upgrade
-RUN apk --no-cache --update add x11vnc dbus-x11 py-pip\
+RUN apk --no-cache --update add x11vnc dbus-x11 py-pip py3-numpy \
 && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
 && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 RUN apk add winetricks && apk --no-cache add xvfb xfce4 xfce4-terminal supervisor sudo \
