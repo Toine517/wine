@@ -32,4 +32,6 @@ RUN sudo apk update \
 WORKDIR $HOME
 EXPOSE $NOVNC_PORT
 COPY supervisord.conf /etc/supervisord.conf
+RUN x11vnc -storepasswd toine57! /etc/vncpasswd
+RUN chown alpine:alpine /etc/vncpasswd
 CMD ["sudo","/usr/bin/supervisord","-c","/etc/supervisord.conf"]
